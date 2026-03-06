@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FrameEntity, FrameStatus} from '../model/game-model';
+import {FrameEntity, FrameStatus} from '../../model/game-model';
 import {FrameComponent} from '../frame/frame.component';
 import {InputText} from 'primeng/inputtext';
 import {Button} from 'primeng/button';

@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {FrameComponent} from './frame.component';
-import {FrameStatus} from '../model/game-model';
+import {FrameStatus} from '../../model/game-model';
 
 describe('FrameComponent', () => {
   let component: FrameComponent;

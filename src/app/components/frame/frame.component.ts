@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {FrameEntity, FrameStatus} from '../model/game-model';
+import {FrameEntity, FrameStatus} from '../../model/game-model';
 import {NgClass} from '@angular/common';
 
 @Component({

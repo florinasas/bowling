@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {GameComponent} from './game.component';
-import {FrameStatus} from '../model/game-model';
+import {FrameStatus} from '../../model/game-model';
 import {MessageService} from 'primeng/api';
 
 describe('GameComponent', () => {
