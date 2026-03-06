@@ -27,8 +27,8 @@ It allows users to enter rolls and automatically calculates frame scores.
 
 - Angular 21.2.1
 - Node.js 24.14.0
-- PrimeNG
-- TypeScript
+- PrimeNG 21.1.3
+- TypeScript 5.9.2
 - Jasmine / Karma (tests)
 
 
@@ -62,11 +62,4 @@ Run unit tests:
 ng test
 
 
-## Project Structure
-
-src/
-  app/
-    frame/
-    game/
-    model/
 
