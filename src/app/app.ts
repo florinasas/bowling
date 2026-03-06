@@ -1,31 +1,37 @@
-import {Component, signal} from '@angular/core';
+import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {FrameEntity, FrameStatus} from './model/game-model';
 import {FrameComponent} from './frame/frame.component';
 import {InputText} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {FormsModule} from '@angular/forms';
+import {TableModule} from 'primeng/table';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FrameComponent, InputText, ButtonModule, FormsModule],
+  imports: [RouterOutlet, FrameComponent, InputText, ButtonModule, FormsModule, TableModule],
   templateUrl: './app.html',
   standalone: true,
   styleUrl: './app.css'
 })
+
 export class App {
-  protected readonly title = signal('bowlingGame');
+
   readonly MAX_FRAMES = 10;
   frames: FrameEntity[] = Array.from({length: this.MAX_FRAMES});
-  currentFrame: FrameEntity;
+  currentFrame!: FrameEntity;
   currentFrameIndex = 0;
-  previousFrame!: FrameEntity;
-  inputRoll!: number;
-  inputRoll2!: number;
-  inputRoll3!: number;
+  previousFrame!: FrameEntity | null;
+  inputRoll!: number | null;
+  isGameOver: boolean = false;
 
 
   constructor() {
+    this.initFrames();
+  }
+
+  initFrames() {
     for (let i = 0; i < this.MAX_FRAMES; i++) {
       this.frames[i] = {
         index: i + 1,
@@ -38,40 +44,14 @@ export class App {
     this.currentFrame = this.frames[this.currentFrameIndex];
   }
 
+  //Function to updated current Frame and previous Frame, when a roll is executed
   updateFrames() {
-    let newFrameStatus: FrameStatus = FrameStatus.NEW;
 
+    if (this.inputRoll === null) return;
 
     this.currentFrame.score += this.inputRoll;
-    console.log("score " + this.currentFrame.score);
-    if (this.currentFrame.score === 10) {
-      if (FrameStatus.NEW === this.currentFrame.status) {
-        this.currentFrame.status = FrameStatus.STRIKE;
-      } else if (FrameStatus.ROLL1 === this.currentFrame.status) {
-        this.currentFrame.status = FrameStatus.SPARE;
-      }
-    } else if (this.currentFrame.score <= 10) {
-      if (FrameStatus.NEW === this.currentFrame.status) {
-        this.currentFrame.status = FrameStatus.ROLL1;
-      } else if (FrameStatus.ROLL1 === this.currentFrame.status) {
-        this.currentFrame.status = FrameStatus.ROLL2;
-      }
-    }
-
-    if (this.previousFrame) {
-      if (FrameStatus.SPARE === this.previousFrame.status &&
-        (FrameStatus.ROLL1 === this.currentFrame.status || FrameStatus.STRIKE === this.currentFrame.status)) {
-        this.previousFrame.score += this.inputRoll;
-        this.previousFrame.status = FrameStatus.CLOSED;
-      } else if (FrameStatus.STRIKE === this.previousFrame.status) {
-        this.previousFrame.score += this.inputRoll;
-        if (FrameStatus.ROLL2 === this.currentFrame.status) {
-          this.previousFrame.status = FrameStatus.CLOSED
-        }
-      } else {
-        this.previousFrame.status = FrameStatus.CLOSED
-      }
-    }
+    this.currentFrame.status = this.getCurrentFrameStatus();
+    this.updatePreviousFrame(this.inputRoll);
 
     if (FrameStatus.ROLL1 === this.currentFrame.status
       || FrameStatus.STRIKE === this.currentFrame.status) {
@@ -80,20 +60,76 @@ export class App {
       this.currentFrame.roll2 = this.inputRoll;
     }
 
+    //if the Frame is to be closed
     if (FrameStatus.ROLL2 === this.currentFrame.status
       || FrameStatus.SPARE === this.currentFrame.status
       || FrameStatus.STRIKE === this.currentFrame.status) {
-
 
       if (this.previousFrame) {
         this.currentFrame.score += this.previousFrame.score;
       }
 
-      this.previousFrame = this.currentFrame;
       this.currentFrameIndex++;
-      this.currentFrame = this.frames[this.currentFrameIndex];
 
+      //end game
+      if (this.currentFrameIndex >= this.MAX_FRAMES) {
+        this.isGameOver = true;
+      } else {
+        this.previousFrame = this.currentFrame;
+        this.currentFrame = this.frames[this.currentFrameIndex];
+      }
     }
 
+    this.inputRoll = null;
+
+  }
+
+  //Function to calculate the new status of the current Frame according to current roll value and old Frame status
+  getCurrentFrameStatus(): FrameStatus {
+
+    let newFrameStatus: FrameStatus = FrameStatus.NEW;
+
+    if (this.currentFrame.score === 10) {
+      if (FrameStatus.NEW === this.currentFrame.status) {
+        newFrameStatus = FrameStatus.STRIKE;
+      } else if (FrameStatus.ROLL1 === this.currentFrame.status) {
+        newFrameStatus = FrameStatus.SPARE;
+      }
+    } else if (this.currentFrame.score <= 10) {
+      if (FrameStatus.NEW === this.currentFrame.status) {
+        newFrameStatus = FrameStatus.ROLL1;
+      } else if (FrameStatus.ROLL1 === this.currentFrame.status) {
+        newFrameStatus = FrameStatus.ROLL2;
+      }
+    }
+
+    return newFrameStatus;
+  }
+
+  //Function to update the previous Frame in case it was a STRIKE or SPARE
+  updatePreviousFrame(inputRoll: number) {
+
+    if (this.previousFrame) {
+      if (FrameStatus.SPARE === this.previousFrame.status &&
+        (FrameStatus.ROLL1 === this.currentFrame.status || FrameStatus.STRIKE === this.currentFrame.status)) {
+        this.previousFrame.score += inputRoll;
+        this.previousFrame.status = FrameStatus.CLOSED;
+      } else if (FrameStatus.STRIKE === this.previousFrame.status) {
+        this.previousFrame.score += inputRoll;
+        if (FrameStatus.ROLL1 !== this.currentFrame.status) {
+          this.previousFrame.status = FrameStatus.CLOSED
+        }
+      } else {
+        this.previousFrame.status = FrameStatus.CLOSED
+      }
+    }
+  }
+
+  newGame() {
+    this.isGameOver = false;
+    this.frames = Array.from({length: this.MAX_FRAMES});
+    this.currentFrameIndex = 0;
+    this.previousFrame = null;
+    this.initFrames();
   }
 }

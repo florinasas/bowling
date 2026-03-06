@@ -1,0 +1,23 @@
+.frame {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.frame-closed {
+  display: flex;
+  flex-direction: column;
+  background-color: lightgray;
+}
+
+.frame-spare {
+  display: flex;
+  flex-direction: column;
+  background-color: lightblue;
+}
+
+.frame-strike {
+  display: flex;
+  flex-direction: column;
+  background-color: red;
+}

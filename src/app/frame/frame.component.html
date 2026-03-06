@@ -1,7 +1,15 @@
-<p>Frame {{ frame.index }}</p>
-<p>Roll1: {{ frame.roll1 }}</p>
-<p>Roll2: {{ frame.roll2 }}</p>
-<p>Status: {{ frame.status }}</p>
-<p>Score: {{ frame.score }}</p>
+<div [ngClass]="{
+  'frame': isNew(),
+  'frame-closed': isClosed(),
+  'frame-spare': isSpare(),
+  'frame-strike': isStrike()
+}">
+  <h4>Frame {{ frame.index }}</h4>
+  <div>Roll1: {{ frame.roll1 }}</div>
+  <div>Roll2: {{ frame.roll2 }}</div>
+  <div>Score: {{ frame.score }}</div>
+  <div>Status: {{ frame.status }}</div>
+</div>
 
-<br>
+
+
