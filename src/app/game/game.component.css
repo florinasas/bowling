@@ -1,0 +1,31 @@
+.roll {
+  width: 200px;
+}
+
+.center-box {
+  width: 1300px;
+  height: 500px;
+  border: 2px solid black;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin: auto;
+}
+
+.message-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+
+  border-radius: 6px;
+  font-size: 14px;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
