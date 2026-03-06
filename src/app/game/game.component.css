@@ -6,26 +6,65 @@
   width: 1300px;
   height: 500px;
   border: 2px solid black;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   margin: auto;
+  position: relative;
+}
+
+.legend {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+
+  background: white;
+  border: 1px solid black;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.legend-strike {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+  background: red;
+}
+.legend-spare {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+  background: lightblue;
+}
+
+.legend-new {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+  background: whitesmoke;
+}
+
+.legend-closed {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+  background: lightgray;
 }
 
 .message-box {
   position: fixed;
   bottom: 20px;
   right: 20px;
-
   padding: 10px 20px;
   background-color: #333;
   color: white;
-
   border-radius: 6px;
   font-size: 14px;
-
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
+

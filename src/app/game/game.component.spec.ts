@@ -2,6 +2,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {GameComponent} from './game.component';
 import {FrameStatus} from '../model/game-model';
+import {MessageService} from 'primeng/api';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -10,6 +11,7 @@ describe('GameComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GameComponent],
+      providers: [MessageService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(GameComponent);

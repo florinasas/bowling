@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FrameEntity, FrameStatus} from '../model/game-model';
 import {FrameComponent} from '../frame/frame.component';
 import {InputText} from 'primeng/inputtext';
-import {Button, ButtonModule} from 'primeng/button';
+import {Button} from 'primeng/button';
 import {FormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {MessageService, PrimeTemplate} from 'primeng/api';
 import {Toast} from 'primeng/toast';
+
 
 
 @Component({
@@ -33,7 +34,7 @@ export class GameComponent {
   previousFrame!: FrameEntity | null;
   inputRoll!: number | null;
   isGameOver: boolean = false;
-
+  isBonusRoll: boolean = false;
 
   constructor(private messageService: MessageService) {
     this.initFrames();
@@ -56,10 +57,16 @@ export class GameComponent {
   updateFrames() {
 
     if (this.inputRoll === null) return;
+
+    //handle extra roll for last Frame if it is STRIKE or SPARE
+    if (this.isBonusRoll){
+      this.handleBonusRoll(this.inputRoll);
+      return;
+    }
+
     if (this.currentFrame.score + this.inputRoll > 10) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Roll value too big!',
         detail: 'Roll value too big!',
         life: 3000
       });
@@ -86,18 +93,17 @@ export class GameComponent {
         this.currentFrame.score += this.previousFrame.score;
       }
 
-      this.currentFrameIndex++;
-
       //end game or go to next Frame
-      if (this.currentFrameIndex >= this.MAX_FRAMES) {
-        this.isGameOver = true;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Game over!',
-          detail: 'Game over!',
-          life: 3000
-        });
+      if (this.currentFrameIndex === this.MAX_FRAMES - 1) {
+
+        //allow one more roll
+        if (FrameStatus.SPARE !== this.currentFrame.status && FrameStatus.STRIKE !== this.currentFrame.status) {
+          this.endGame();
+        } else {
+          this.isBonusRoll = true;
+        }
       } else {
+        this.currentFrameIndex++;
         this.previousFrame = this.currentFrame;
         this.currentFrame = this.frames[this.currentFrameIndex];
       }
@@ -107,6 +113,7 @@ export class GameComponent {
     this.inputRoll = null;
     this.messageService.clear();
   }
+
 
   //Function to calculate the new status of the current Frame according to current roll value and old Frame status
   getCurrentFrameStatus(): FrameStatus {
@@ -131,7 +138,6 @@ export class GameComponent {
   }
 
   //Function to update the previous Frame: add bonus in case it was a STRIKE or SPARE and set status
-
   updatePreviousFrame(inputRoll: number) {
 
     if (this.previousFrame) {
@@ -148,6 +154,22 @@ export class GameComponent {
         this.previousFrame.status = FrameStatus.CLOSED
       }
     }
+  }
+
+  endGame() {
+    this.isGameOver = true;
+    this.currentFrame.status = FrameStatus.CLOSED;
+    this.messageService.add({
+      severity: 'success',
+      detail: 'Game over!',
+      life: 3000
+    });
+  }
+
+  handleBonusRoll(inputRoll: number){
+    this.currentFrame.score += inputRoll;
+    this.inputRoll = null;
+    this.endGame();
   }
 
   newGame() {
