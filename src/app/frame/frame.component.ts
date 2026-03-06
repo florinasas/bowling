@@ -29,4 +29,12 @@ export class FrameComponent {
   isStrike() {
     return FrameStatus.STRIKE === this.frame.status;
   }
+
+  isRoll1() {
+    return FrameStatus.ROLL1 === this.frame.status;
+  }
+
+  isRoll2() {
+    return FrameStatus.ROLL2 === this.frame.status;
+  }
 }

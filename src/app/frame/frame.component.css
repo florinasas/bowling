@@ -1,23 +1,35 @@
 .frame {
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: whitesmoke;
+  width: 90px;
+  justify-content: center;
+  align-items: center;
 }
 
 .frame-closed {
   display: flex;
   flex-direction: column;
   background-color: lightgray;
+  width: 90px;
+  justify-content: center;
+  align-items: center;
 }
 
 .frame-spare {
   display: flex;
   flex-direction: column;
   background-color: lightblue;
+  width: 90px;
+  justify-content: center;
+  align-items: center;
 }
 
 .frame-strike {
   display: flex;
   flex-direction: column;
   background-color: red;
+  width: 90px;
+  justify-content: center;
+  align-items: center;
 }

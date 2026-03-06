@@ -4,6 +4,7 @@ import Aura from '@primeuix/themes/aura';
 import {providePrimeNG} from 'primeng/config';
 
 import {routes} from './app.routes';
+import {MessageService} from 'primeng/api';
 
 
 export const appConfig: ApplicationConfig = {
@@ -14,7 +15,8 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura
       }
-    })
+    }),
+    MessageService
 
   ]
 };

@@ -1,31 +1,8 @@
 <header>
-  <div class="content">
-    <h3>Bowling game</h3>
-  </div>
+
 </header>
+<br><br>
 <main>
-  <p-table [value]="[frames]" showGridlines>
-    <ng-template pTemplate="body">
-      <tr>
-        @for (frame of frames; track frame.index) {
-          <td>
-            <app-frame [frame]="frame"></app-frame>
-          </td>
-        }
-      </tr>
-    </ng-template>
-  </p-table>
-  <br><br>
-  <div class="flex align-items-center gap-3">
-
-
-    <input pInputText id="roll1" type="number" class="roll"
-           [(ngModel)]="inputRoll"
-           [disabled]="isGameOver"
-           [min]="0"
-           [max]="10"/>&nbsp;
-    <p-button label="Roll" (click)="updateFrames()" [disabled]="isGameOver"/>&nbsp;
-    <p-button label="New Game" (click)="newGame()"/>
-  </div>
+  <app-game></app-game>
 </main>
 
