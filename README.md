@@ -22,6 +22,9 @@ It allows users to enter rolls and automatically calculates frame scores.
 - Strike and Spare detection
 - New game functionality
 
+## TODOs
+
+- Add validation for input rolls (negative numbers)
 
 ## Tech Stack
 

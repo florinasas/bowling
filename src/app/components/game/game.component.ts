@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
 import {FrameEntity, FrameStatus} from '../../model/game-model';
 import {FrameComponent} from '../frame/frame.component';
-import {InputText} from 'primeng/inputtext';
 import {Button} from 'primeng/button';
 import {FormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {MessageService, PrimeTemplate} from 'primeng/api';
 import {Toast} from 'primeng/toast';
+import {MAX_FRAME_POINTS, MAX_FRAMES} from '../../model/constants';
 
 
 
@@ -16,7 +16,6 @@ import {Toast} from 'primeng/toast';
     Button,
     FormsModule,
     FrameComponent,
-    InputText,
     PrimeTemplate,
     TableModule,
     Toast
@@ -27,8 +26,8 @@ import {Toast} from 'primeng/toast';
 })
 export class GameComponent {
 
-  readonly MAX_FRAMES = 10;
-  frames: FrameEntity[] = Array.from({length: this.MAX_FRAMES});
+
+  frames: FrameEntity[] = Array.from({length: MAX_FRAMES});
   currentFrame!: FrameEntity;
   currentFrameIndex = 0;
   previousFrame!: FrameEntity | null;
@@ -41,7 +40,7 @@ export class GameComponent {
   }
 
   initFrames() {
-    for (let i = 0; i < this.MAX_FRAMES; i++) {
+    for (let i = 0; i < MAX_FRAMES; i++) {
       this.frames[i] = {
         index: i + 1,
         roll1: 0,
@@ -53,7 +52,7 @@ export class GameComponent {
     this.currentFrame = this.frames[this.currentFrameIndex];
   }
 
-  //Function to updated current Frame and previous Frame, when a roll is executed
+  //Function to update current Frame and previous Frame, when a roll is executed
   updateFrames() {
 
     if (this.inputRoll === null) return;
@@ -94,7 +93,7 @@ export class GameComponent {
       }
 
       //end game or go to next Frame
-      if (this.currentFrameIndex === this.MAX_FRAMES - 1) {
+      if (this.currentFrameIndex === MAX_FRAMES - 1) {
 
         //allow one more roll
         if (FrameStatus.SPARE !== this.currentFrame.status && FrameStatus.STRIKE !== this.currentFrame.status) {
@@ -120,13 +119,13 @@ export class GameComponent {
 
     let newFrameStatus: FrameStatus = FrameStatus.NEW;
 
-    if (this.currentFrame.score === 10) {
+    if (this.currentFrame.score === MAX_FRAME_POINTS) {
       if (FrameStatus.NEW === this.currentFrame.status) {
         newFrameStatus = FrameStatus.STRIKE;
       } else if (FrameStatus.ROLL1 === this.currentFrame.status) {
         newFrameStatus = FrameStatus.SPARE;
       }
-    } else if (this.currentFrame.score <= 10) {
+    } else if (this.currentFrame.score < MAX_FRAME_POINTS) {
       if (FrameStatus.NEW === this.currentFrame.status) {
         newFrameStatus = FrameStatus.ROLL1;
       } else if (FrameStatus.ROLL1 === this.currentFrame.status) {
@@ -175,7 +174,7 @@ export class GameComponent {
   newGame() {
     this.isGameOver = false;
     this.messageService.clear();
-    this.frames = Array.from({length: this.MAX_FRAMES});
+    this.frames = Array.from({length: MAX_FRAMES});
     this.currentFrameIndex = 0;
     this.previousFrame = null;
     this.initFrames();
